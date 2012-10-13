@@ -5,7 +5,7 @@ import org.apache.camel.builder.RouteBuilder;
 /**
  * A Camel Java DSL Router
  */
-public class MyRouteBuilder extends RouteBuilder {
+public class CmcRouteBuilder extends RouteBuilder {
 
     /**
      * Let's configure the Camel routing rules using Java code...
@@ -15,12 +15,9 @@ public class MyRouteBuilder extends RouteBuilder {
         // here is a sample which processes the input files
         // (leaving them in place - see the 'noop' flag)
         // then performs content based routing on the message using XPath
-        from("file:src/data?noop=true")
-            .choice()
-                .when(xpath("/person/city = 'London'"))
-                    .to("file:target/messages/uk")
-                .otherwise()
-                    .to("file:target/messages/others");
+        from("direct:start")
+        .to("ahc:http://http://dd.weatheroffice.gc.ca/model_gem_global/low_resolution/grib2/lat_lon/00/000/CMC_glb_ABSV_ISBL_250_latlon2x2_2012101300_P000.grib2")
+                .to("file:target/foo.grib2");
     }
 
 }
